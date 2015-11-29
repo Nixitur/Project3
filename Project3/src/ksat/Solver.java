@@ -21,14 +21,17 @@ public class Solver {
 	
 	/**
 	 * Attempts to solve the given formula with the Modified Random-3-SAT algorithm with an error probability of at most 10^(-13).
+	 * @return <tt>true</tt> if a satisfying interpretation could be found, <tt>false</tt> otherwise.
 	 */
-	public void solve(){
+	public boolean solve(){
 		int restarts = getNoOfRestarts();
 		Long interp = modifiedRandomKSat(restarts);
 		if (interp == null){
 			System.out.println("No satisfying interpretation could be found.");
+			return false;
 		} else {
 			System.out.println("A satisfying interpretation is "+interpretationToString(interp));
+			return true;
 		}
 	}
 	

@@ -1,7 +1,11 @@
 package ksat;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 	
@@ -35,12 +39,38 @@ public class Main {
 		s.solve();
 	}
 	
-	private static int[][] generateRandomClauses(int noOfVars, int noOfClauses){
+	private static int[][] generateRandomClauses1(int noOfVars, int noOfClauses){
+		List<Integer> literals = new ArrayList<Integer>();
+		for (int i = 1; i <= noOfVars; i++){
+			literals.add(i);
+			literals.add(-i);
+		}
 		int[][] clauses = new int[noOfClauses][3];
 		Random rand = new Random();
 		for (int i = 0; i < noOfClauses; i++){
+			List<Integer> literalsCopy = new ArrayList<Integer>(literals);
 			for (int j = 0; j < 3; j++){
-				int var = rand.nextInt(noOfVars)+1;
+				int index = rand.nextInt(literalsCopy.size());
+				clauses[i][j] = literalsCopy.get(index);
+				literalsCopy.remove(index);
+			}
+		}
+		return clauses;
+	}
+	
+	private static int[][] generateRandomClauses2(int noOfVars, int noOfClauses){
+		List<Integer> variables = new ArrayList<Integer>();
+		for (int i = 1; i <= noOfVars; i++){
+			variables.add(i);
+		}
+		int[][] clauses = new int[noOfClauses][3];
+		Random rand = new Random();
+		for (int i = 0; i < noOfClauses; i++){
+			List<Integer> variablesCopy = new ArrayList<Integer>(variables);
+			for (int j = 0; j < 3; j++){
+				int index = rand.nextInt(variablesCopy.size());
+				int var = variablesCopy.get(index);
+				variablesCopy.remove(index);
 				if (rand.nextBoolean()){
 					clauses[i][j] = var;
 				} else {
