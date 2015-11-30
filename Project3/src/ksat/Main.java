@@ -1,6 +1,7 @@
 package ksat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -20,21 +21,25 @@ public class Main {
 	 * Hence, variables are 1-indexed.
 	 */
 	public static void main(String[] args){
-		Scanner sc = new Scanner(System.in);
-		int noOfVars = sc.nextInt();
-		int noOfClauses = sc.nextInt();
-		int[][] clauses = new int[noOfClauses][3];
-		for (int i = 0; i < noOfClauses; i++){
-			for (int j = 0; j < 3; j++){
-				int v = sc.nextInt();
-				if ((v > noOfVars) || (-v > noOfVars) || (v == 0)){
-					sc.close();
-					throw new IllegalArgumentException("Variable index too high or zero.");
-				}
-				clauses[i][j] = v;
-			}
-		}
-		sc.close();
+//		Scanner sc = new Scanner(System.in);
+//		int noOfVars = sc.nextInt();
+//		int noOfClauses = sc.nextInt();
+//		int[][] clauses = new int[noOfClauses][3];
+//		for (int i = 0; i < noOfClauses; i++){
+//			for (int j = 0; j < 3; j++){
+//				int v = sc.nextInt();
+//				if ((v > noOfVars) || (-v > noOfVars) || (v == 0)){
+//					sc.close();
+//					throw new IllegalArgumentException("Variable index too high or zero.");
+//				}
+//				clauses[i][j] = v;
+//			}
+//		}
+//		sc.close();
+		int noOfVars = 9;
+		int noOfClauses = 20;
+		int[][] clauses = generateRandomClauses2(noOfVars,noOfClauses);
+		System.out.println(arrayArrayToString(clauses));
 		Solver s = new Solver(clauses,noOfVars);
 		s.solve();
 	}
@@ -79,5 +84,14 @@ public class Main {
 			}
 		}
 		return clauses;
+	}
+	
+	private static String arrayArrayToString(int[][] arg0){
+		String result = "[";
+		for (int[] array : arg0){
+			result += Arrays.toString(array)+", ";
+		}
+		result = result.substring(0,result.length()-2) + "]";
+		return result;
 	}
 }

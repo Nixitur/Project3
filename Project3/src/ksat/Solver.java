@@ -1,5 +1,6 @@
 package ksat;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Solver {
@@ -25,12 +26,12 @@ public class Solver {
 	 */
 	public boolean solve(){
 		int restarts = getNoOfRestarts();
-		Long interp = modifiedRandomKSat(restarts);
+		boolean[] interp = modifiedRandomKSat(restarts);
 		if (interp == null){
 			System.out.println("No satisfying interpretation could be found.");
 			return false;
 		} else {
-			System.out.println("A satisfying interpretation is "+interpretationToString(interp));
+			System.out.println("A satisfying interpretation is "+Arrays.toString(interp));
 			return true;
 		}
 	}
@@ -40,10 +41,11 @@ public class Solver {
 	 * @param r The number of restarts in Modified Random-3-SAT. 
 	 * @return A satisfying interpretation of the formula if such a one is found; <tt>null</tt> otherwise.
 	 */
-	private Long modifiedRandomKSat(int r){
+	private boolean[] modifiedRandomKSat(int r){
 		int l = 3 * noOfVars;
+		System.out.println(r);
 		for (int i = 0; i < r; i++){
-			Long interp = randomKSat(l);
+			boolean[] interp = randomKSat(l);
 			if (interp != null){
 				return interp;
 			}
@@ -56,8 +58,8 @@ public class Solver {
 	 * @param l The number of iterations of Random 3-SAT.
 	 * @return A satisfying interpretation of the formula if such a one is found; <tt>null</tt> otherwise.
 	 */
-	private Long randomKSat(int l){
-		long interp = getRandomInterpretation();
+	private boolean[] randomKSat(int l){
+		boolean[] interp = getRandomInterpretation();
 		for (int i = 0; i < l; i++){
 			int[] failedClause = satisfies(interp);
 			if (failedClause == null){
@@ -72,8 +74,12 @@ public class Solver {
 	 * Generates a random interpretation.
 	 * @return A random interpretation.
 	 */
-	private long getRandomInterpretation(){
-		return rand.nextLong();
+	private boolean[] getRandomInterpretation(){
+		boolean[] interp = new boolean[noOfVars];
+		for (int i = 0; i < noOfVars; i++){
+			interp[i] = rand.nextBoolean();
+		}
+		return interp;
 	}
 	
 	/**
@@ -82,13 +88,13 @@ public class Solver {
 	 * @return A clause that is not satisfied by the interpretation if this interpretation does not satisfy all clauses,
 	 * <tt>null</tt> otherwise.
 	 */
-	private int[] satisfies(long interp){
+	private int[] satisfies(boolean[] interp){
 		for (int[] clause : clauses){
 			boolean sat = false;
 			for (int i = 0; i < 3; i++){
 				int lit = clause[i];
 				int var = Math.abs(lit);
-				boolean varTrue = (((1L << (var-1)) & interp) != 0);
+				boolean varTrue = interp[var-1];
 				if ((varTrue && (lit > 0)) || (!varTrue && (lit < 0))){
 					sat = true;
 					break;
@@ -105,11 +111,10 @@ public class Solver {
 	 * From a given clause, chooses a random literal and flips the corresponding variable in the interpretation.
 	 * @param clause The given clause.
 	 * @param interp An interpretation of the formula.
-	 * @return The interpretation with a bit flipped that corresponds to a literal in <tt>clause</tt>.
 	 */
-	private long flipRandomVar(int[] clause, long interp){
+	private void flipRandomVar(int[] clause, boolean[] interp){
 		int var = Math.abs(clause[rand.nextInt(3)]);
-		return interp ^ (1L << (var-1));
+		interp[var-1] = !interp[var-1];
 	}
 	
 	/**
@@ -119,25 +124,5 @@ public class Solver {
 	private int getNoOfRestarts(){
 		double p = 0.5 * Math.pow(0.75, noOfVars);
 		return (int) Math.ceil(30.0 / p);
-	}
-	
-	/**
-	 * Generates a String representation of an interpretation.
-	 * @param interp The <tt>long</tt> representation of an interpretation of the formula.
-	 * @return A string starting with the character '[' and ending with ']'. In between those is a comma-delimited list of boolean values, 
-	 * one for each variable. If the ith-lowest bit of the interpretation is a 1, then the ith list entry is "true", otherwise "false".
-	 */
-	private String interpretationToString(long interp){
-		String result = "[";
-		for (int i = 0; i < noOfVars; i++){
-			boolean varTrue = (((1L << i) & interp) != 0);
-			if (varTrue){
-				result += "true, ";
-			} else {
-				result += "false, ";
-			}
-		}
-		result = result.substring(0,result.length()-2)+"]";
-		return result;
 	}
 }
