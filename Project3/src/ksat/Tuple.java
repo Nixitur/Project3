@@ -19,6 +19,6 @@ public class Tuple {
 	 * @return mk, avgTime and outOfTime in a comma-delimited array.
 	 */
 	public String toString(){
-		return "["+mk+", "+avgTime+", "+outOfTime+"]";
+		return "["+mk+", "+avgTime+"]";
 	}
 } 

@@ -11,8 +11,10 @@ public class Main {
 	 * @param args The first value is the random clause generation variant to use ("1" or "2"), the second one is the number of variables to
 	 * start at and the third one is the number of clauses to start with.
 	 */
-	public static void main(String[] args){		
+	public static void main(String[] args){
 		int variant = Integer.parseInt(args[0]);
+		System.out.println("The following lines are in the format");
+		System.out.println("n : [m_3^["+variant+"](n), avg time for the last (n,m) combination]");
 		Map<Integer,Integer> nToMk = new HashMap<Integer,Integer>();
 		int n = Integer.parseInt(args[1]);
 		int m = Integer.parseInt(args[2]);
@@ -33,7 +35,7 @@ public class Main {
 		// At this point, n is the first one where MassSolver was "out of time", meaning that it took over 300 seconds.
 		// This one is n_max and still needs to be included.
 		System.out.println("For variant "+variant+", n_max is "+n+".");
-		System.out.println("m_k^[i](n) is as follows:");
+		System.out.println("m_3^["+variant+"](n) is as follows:");
 		System.out.println(orderedMapString(nToMk,10,n));
 	}
 	
