@@ -43,7 +43,6 @@ public class Solver {
 	 */
 	private boolean[] modifiedRandomKSat(int r){
 		int l = 3 * noOfVars;
-		System.out.println(r);
 		for (int i = 0; i < r; i++){
 			boolean[] interp = randomKSat(l);
 			if (interp != null){

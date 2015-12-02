@@ -2,11 +2,11 @@ package ksat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Main {
 	
@@ -36,12 +36,16 @@ public class Main {
 //			}
 //		}
 //		sc.close();
-		int noOfVars = 9;
-		int noOfClauses = 20;
-		int[][] clauses = generateRandomClauses2(noOfVars,noOfClauses);
+		int noOfVars = 21;
+		int noOfClauses = 100;
+		int[][] clauses = generateRandomClauses1(noOfVars,noOfClauses);
+//		clauses = removeUselessClauses(clauses);
 		System.out.println(arrayArrayToString(clauses));
 		Solver s = new Solver(clauses,noOfVars);
+		long startTime = System.currentTimeMillis();
 		s.solve();
+		long endTime = System.currentTimeMillis();
+		System.out.println((endTime-startTime)+" ms");
 	}
 	
 	private static int[][] generateRandomClauses1(int noOfVars, int noOfClauses){
@@ -84,6 +88,33 @@ public class Main {
 			}
 		}
 		return clauses;
+	}
+	
+	private static int[][] removeUselessClauses(int[][] clauses){
+		Map<Integer,int[]> hashToArray = new HashMap<Integer,int[]>();
+		for (int[] clause : clauses){
+			Arrays.sort(clause);
+			boolean dupl = false;
+			for (int lit : clause){
+				int index = Arrays.binarySearch(clause, -lit);
+				if (index >= 0){
+					dupl = true;
+					break;
+				}
+			}
+			if (!dupl){
+				int hash = Arrays.hashCode(clause);
+				if (!hashToArray.containsKey(hash)){
+					hashToArray.put(Arrays.hashCode(clause), clause);
+				}
+			}
+		}
+		int[][] result = new int[hashToArray.size()][3];
+		int i = 0;
+		for (int[] clause : hashToArray.values()){
+			result[i++] = clause;
+		}
+		return result;
 	}
 	
 	private static String arrayArrayToString(int[][] arg0){
