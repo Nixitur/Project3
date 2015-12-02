@@ -1,14 +1,58 @@
 package ksat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+	
+	/**
+	 * Starts the main Mass Solver.
+	 * @param args The first value is the random clause generation variant to use ("1" or "2"), the second one is the number of variables to
+	 * start at and the third one is the number of clauses to start with.
+	 */
+	public static void main(String[] args){		
+		int variant = Integer.parseInt(args[0]);
+		Map<Integer,Integer> nToMk = new HashMap<Integer,Integer>();
+		int n = Integer.parseInt(args[1]);
+		int m = Integer.parseInt(args[2]);
+		int mk = 1;
+		boolean outOfTime = false;
+		while (!outOfTime){
+			Tuple t = MassSolver.solve(n, m, MassSolver.GENERATION_VARIANT_1);
+			mk = t.mk;
+			outOfTime = t.outOfTime;
+			nToMk.put(n, mk);
+			System.out.println(n+": "+t.toString());
+			if (!outOfTime){
+				n++;
+				// For n+1, mk MUST be larger than for n. Thus, start from the last discovered mk.
+				m = mk;
+			}
+		}
+		// At this point, n is the first one where MassSolver was "out of time", meaning that it took over 300 seconds.
+		// This one is n_max and still needs to be included.
+		System.out.println("For variant "+variant+", n_max is "+n+".");
+		System.out.println("m_k^[i](n) is as follows:");
+		System.out.println(orderedMapString(nToMk,10,n));
+	}
+	
+	/**
+	 * Gets a Map that maps Integers to other objects in the proper order.
+	 * @param map A Map that contains mappings for all Integer keys from start to end.
+	 * @param start The starting index.
+	 * @param end The end index.
+	 * @return A String representation of map in the proper order.
+	 */
+	private static <X> String orderedMapString(Map<Integer,X> map, Integer start, Integer end){
+		String result = "[";
+		for (int i = start; i <= end; i++){
+			X value = map.get(i);
+			result += "["+i+", "+value+"], ";
+		}
+		result = result.substring(0, result.length()-2)+"]";
+		return result;
+	}
 	
 	/**
 	 * Reads in a 3-KNF formula from the standard input. The input is the number of variables, then a new line, followed by the
@@ -20,109 +64,22 @@ public class Main {
 	 * 2 -4 6<br>
 	 * Hence, variables are 1-indexed.
 	 */
-	public static void main(String[] args){
-//		Scanner sc = new Scanner(System.in);
-//		int noOfVars = sc.nextInt();
-//		int noOfClauses = sc.nextInt();
-//		int[][] clauses = new int[noOfClauses][3];
-//		for (int i = 0; i < noOfClauses; i++){
-//			for (int j = 0; j < 3; j++){
-//				int v = sc.nextInt();
-//				if ((v > noOfVars) || (-v > noOfVars) || (v == 0)){
-//					sc.close();
-//					throw new IllegalArgumentException("Variable index too high or zero.");
-//				}
-//				clauses[i][j] = v;
-//			}
-//		}
-//		sc.close();
-		int noOfVars = 21;
-		int noOfClauses = 100;
-		int[][] clauses = generateRandomClauses1(noOfVars,noOfClauses);
-//		clauses = removeUselessClauses(clauses);
-		System.out.println(arrayArrayToString(clauses));
-		Solver s = new Solver(clauses,noOfVars);
-		long startTime = System.currentTimeMillis();
-		s.solve();
-		long endTime = System.currentTimeMillis();
-		System.out.println((endTime-startTime)+" ms");
-	}
-	
-	private static int[][] generateRandomClauses1(int noOfVars, int noOfClauses){
-		List<Integer> literals = new ArrayList<Integer>();
-		for (int i = 1; i <= noOfVars; i++){
-			literals.add(i);
-			literals.add(-i);
-		}
+	public int[][] readInClauses(){
+		Scanner sc = new Scanner(System.in);
+		int noOfVars = sc.nextInt();
+		int noOfClauses = sc.nextInt();
 		int[][] clauses = new int[noOfClauses][3];
-		Random rand = new Random();
 		for (int i = 0; i < noOfClauses; i++){
-			List<Integer> literalsCopy = new ArrayList<Integer>(literals);
 			for (int j = 0; j < 3; j++){
-				int index = rand.nextInt(literalsCopy.size());
-				clauses[i][j] = literalsCopy.get(index);
-				literalsCopy.remove(index);
+				int v = sc.nextInt();
+				if ((v > noOfVars) || (-v > noOfVars) || (v == 0)){
+					sc.close();
+					throw new IllegalArgumentException("Variable index too high or zero.");
+				}
+				clauses[i][j] = v;
 			}
 		}
+		sc.close();
 		return clauses;
-	}
-	
-	private static int[][] generateRandomClauses2(int noOfVars, int noOfClauses){
-		List<Integer> variables = new ArrayList<Integer>();
-		for (int i = 1; i <= noOfVars; i++){
-			variables.add(i);
-		}
-		int[][] clauses = new int[noOfClauses][3];
-		Random rand = new Random();
-		for (int i = 0; i < noOfClauses; i++){
-			List<Integer> variablesCopy = new ArrayList<Integer>(variables);
-			for (int j = 0; j < 3; j++){
-				int index = rand.nextInt(variablesCopy.size());
-				int var = variablesCopy.get(index);
-				variablesCopy.remove(index);
-				if (rand.nextBoolean()){
-					clauses[i][j] = var;
-				} else {
-					clauses[i][j] = -var;
-				}
-			}
-		}
-		return clauses;
-	}
-	
-	private static int[][] removeUselessClauses(int[][] clauses){
-		Map<Integer,int[]> hashToArray = new HashMap<Integer,int[]>();
-		for (int[] clause : clauses){
-			Arrays.sort(clause);
-			boolean dupl = false;
-			for (int lit : clause){
-				int index = Arrays.binarySearch(clause, -lit);
-				if (index >= 0){
-					dupl = true;
-					break;
-				}
-			}
-			if (!dupl){
-				int hash = Arrays.hashCode(clause);
-				if (!hashToArray.containsKey(hash)){
-					hashToArray.put(Arrays.hashCode(clause), clause);
-				}
-			}
-		}
-		int[][] result = new int[hashToArray.size()][3];
-		int i = 0;
-		for (int[] clause : hashToArray.values()){
-			result[i++] = clause;
-		}
-		return result;
-	}
-	
-	private static String arrayArrayToString(int[][] arg0){
-		String result = "[";
-		for (int[] array : arg0){
-			result += Arrays.toString(array)+", ";
-		}
-		result = result.substring(0,result.length()-2) + "]";
-		return result;
 	}
 }

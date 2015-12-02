@@ -22,16 +22,20 @@ public class Solver {
 	
 	/**
 	 * Attempts to solve the given formula with the Modified Random-3-SAT algorithm with an error probability of at most 10^(-13).
+	 * @param print <tt>true</tt> to print out whether a satisfying interpretation has been found as well as the interpretation itself, 
+	 * <tt>false</tt> to not do that. 
 	 * @return <tt>true</tt> if a satisfying interpretation could be found, <tt>false</tt> otherwise.
 	 */
-	public boolean solve(){
+	public boolean solve(boolean print){
 		int restarts = getNoOfRestarts();
 		boolean[] interp = modifiedRandomKSat(restarts);
 		if (interp == null){
-			System.out.println("No satisfying interpretation could be found.");
+			if (print)
+				System.out.println("No satisfying interpretation could be found.");
 			return false;
 		} else {
-			System.out.println("A satisfying interpretation is "+Arrays.toString(interp));
+			if (print)
+				System.out.println("A satisfying interpretation is "+Arrays.toString(interp));
 			return true;
 		}
 	}
