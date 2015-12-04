@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
-	
+	private static final long MAX_TIME = 3000;
 	/**
 	 * Starts the main Mass Solver.
 	 * @param args The first value is the random clause generation variant to use ("1" or "2"), the second one is the number of variables to
@@ -14,7 +14,8 @@ public class Main {
 	public static void main(String[] args){
 		int variant = Integer.parseInt(args[0]);
 		System.out.println("The following lines are in the format");
-		System.out.println("n : [m_3^["+variant+"](n), avg time for the last (n,m) combination]");
+		System.out.println("n : [m_3^["+variant+"](n), avg time for the last (n,m) combination, percentage of solved formulas "
+				+ "for the last (n,m) combination]");
 		Map<Integer,Integer> nToMk = new HashMap<Integer,Integer>();
 		int n = Integer.parseInt(args[1]);
 		int m = Integer.parseInt(args[2]);
@@ -23,7 +24,7 @@ public class Main {
 		while (!outOfTime){
 			Tuple t = MassSolver.solve(n, m, MassSolver.GENERATION_VARIANT_1);
 			mk = t.mk;
-			outOfTime = t.outOfTime;
+			outOfTime = (t.avgTime > MAX_TIME);
 			nToMk.put(n, mk);
 			System.out.println(n+": "+t.toString());
 			if (!outOfTime){

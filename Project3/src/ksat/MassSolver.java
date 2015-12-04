@@ -16,40 +16,14 @@ public class MassSolver {
 		Tuple result = new Tuple();
 		int n = noOfVars;
 		int m = startingNoOfClauses;
-		// 3 seconds on average maximum means NO_OF_TRIES * 3000 ms maximum
-		long maxTime = NO_OF_TRIES * 3000;
 		double lastPercentage = 100.0;
 		double curPercentage = 100.0;
-		long curTime = 0;
 		while (curPercentage > 50.0){
-			int solved = 0;
-			int[][] clauses;
-			curTime = 0;
-			for (int i = 0; i < NO_OF_TRIES; i++){
-				if (generationVariant == GENERATION_VARIANT_1){
-					clauses = generateRandomClauses1(n,m);
-				} else if (generationVariant == GENERATION_VARIANT_2){
-					clauses = generateRandomClauses2(n,m);
-				} else {
-					throw new IllegalArgumentException("generationVariant must be 1 or 2.");
-				}
-				clauses = removeUselessClauses(clauses);
-				Solver s = new Solver(clauses,n);
-				long startTime = System.currentTimeMillis();
-				if (s.solve(false)){
-					solved++;
-				}
-				long endTime = System.currentTimeMillis();
-				curTime += endTime-startTime;
-				if (curTime > maxTime){
-					result.outOfTime = true;
-				}
-			}
+			result = MassSolver.testForNM(n, m, generationVariant);
 			lastPercentage = curPercentage;
-			curPercentage = (double)solved / (double)NO_OF_TRIES * 100.0;
+			curPercentage = result.percentage;
 			m++;
 		}
-		result.avgTime = (double)curTime / (double)NO_OF_TRIES;
 		// At this point, lastPercentage is the last one still OVER 50 and curPercentage the first one UNDER 50.
 		double diffToLast = lastPercentage - 50.0;
 		double diffToNext = 50.0 - curPercentage;
@@ -58,6 +32,35 @@ public class MassSolver {
 		} else {
 			result.mk = m-1;
 		}
+		return result;
+	}
+	
+	public static Tuple testForNM(int noOfVars, int noOfClauses, int generationVariant){
+		int solved = 0;
+		int[][] clauses;
+		long curTime = 0;
+		for (int i = 0; i < NO_OF_TRIES; i++){
+			if (generationVariant == GENERATION_VARIANT_1){
+				clauses = generateRandomClauses1(noOfVars,noOfClauses);
+			} else if (generationVariant == GENERATION_VARIANT_2){
+				clauses = generateRandomClauses2(noOfVars,noOfClauses);
+			} else {
+				throw new IllegalArgumentException("generationVariant must be 1 or 2.");
+			}
+			clauses = removeUselessClauses(clauses);
+			Solver s = new Solver(clauses,noOfVars);
+			long startTime = System.currentTimeMillis();
+			if (s.solve(false)){
+				solved++;
+			}
+			long endTime = System.currentTimeMillis();
+			curTime += endTime-startTime;
+		}
+		double percentage = (double)solved / (double)NO_OF_TRIES * 100.0;
+		double avgTime = (double)curTime / (double)NO_OF_TRIES;
+		Tuple result =  new Tuple();
+		result.avgTime = avgTime;
+		result.percentage = percentage;
 		return result;
 	}
 	
