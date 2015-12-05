@@ -22,7 +22,7 @@ public class Main {
 		int mk = 1;
 		boolean outOfTime = false;
 		while (!outOfTime){
-			Tuple t = MassSolver.solve(n, m, MassSolver.GENERATION_VARIANT_1);
+			Tuple t = MassSolver.solve(n, m, variant);
 			mk = t.mk;
 			outOfTime = (t.avgTime > MAX_TIME);
 			nToMk.put(n, mk);
