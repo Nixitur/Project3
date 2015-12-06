@@ -1,40 +1,21 @@
 package ksat;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
-	private static final long MAX_TIME = 3000;
 	/**
 	 * Starts the main Mass Solver.
-	 * @param args The first value is the random clause generation variant to use ("1" or "2"), the second one is the number of variables to
-	 * start at and the third one is the number of clauses to start with.
+	 * @param args The first value is the random clause generation variant to use ("1" or "2") and the second one is the number of variables to
+	 * start with.
 	 */
 	public static void main(String[] args){
 		int variant = Integer.parseInt(args[0]);
 		System.out.println("The following lines are in the format");
 		System.out.println("n : [m_3^["+variant+"](n), avg time for the last (n,m) combination, percentage of solved formulas "
 				+ "for the last (n,m) combination]");
-		Map<Integer,Integer> nToMk = new HashMap<Integer,Integer>();
 		int n = Integer.parseInt(args[1]);
-		int m = Integer.parseInt(args[2]);
-		int mk = 1;
-		boolean outOfTime = false;
-		while (!outOfTime){
-			Tuple t = MassSolver.solve(n, m, variant);
-			mk = t.mk;
-			outOfTime = (t.avgTime > MAX_TIME);
-			nToMk.put(n, mk);
-			System.out.println(n+": "+t.toString());
-			if (!outOfTime){
-				n++;
-				// For n+1, mk MUST be larger than for n. Thus, start from the last discovered mk.
-				m = mk;
-			}
-		}
-		// At this point, n is the first one where MassSolver was "out of time", meaning that it took over 300 seconds.
-		// This one is n_max and still needs to be included.
+		Map<Integer,Integer> nToMk = MassSolver.solve(n, variant);
 		System.out.println("For variant "+variant+", n_max is "+n+".");
 		System.out.println("m_3^["+variant+"](n) is as follows:");
 		System.out.println(orderedMapString(nToMk,10,n));

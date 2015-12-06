@@ -23,6 +23,7 @@ n : [m_3^[1](n), avg time for the last (n,m) combination, percentage of solved f
 For variant 1, n_max is 29.
 m_3^[1](n) is as follows:
 [[10, 61], [11, 62], [12, 66], [13, 72], [14, 76], [15, 80], [16, 85], [17, 88], [18, 91], [19, 98], [20, 99], [21, 104], [22, 108], [23, 111], [24, 116], [25, 122], [26, 125], [27, 130], [28, 133], [29, 135]]
+y=18.721804511278+4.0706766917293x
 
 The following lines are in the format
 n : [m_3^[2](n), avg time for the last (n,m) combination, percentage of solved formulas for the last (n,m) combination]
@@ -47,3 +48,4 @@ n : [m_3^[2](n), avg time for the last (n,m) combination, percentage of solved f
 For variant 2, n_max is 27.
 m_3^[2](n) is as follows:
 [[10, 51], [11, 54], [12, 59], [13, 63], [14, 67], [15, 71], [16, 74], [17, 81], [18, 84], [19, 88], [20, 91], [21, 97], [22, 102], [23, 105], [24, 107], [25, 113], [26, 117], [27, 123]]
+y=8.3742690058479+4.1929824561404x

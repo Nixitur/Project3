@@ -125,7 +125,6 @@ public class Solver {
 	 * @return The necessary number of restarts in Modified k-SAT
 	 */
 	private int getNoOfRestarts(){
-		double p = 0.5 * Math.pow(0.75, noOfVars);
-		return (int) Math.ceil(30.0 / p);
+		return (int) Math.ceil(60.0 * Math.pow(4.0 / 3.0, noOfVars));
 	}
 }

@@ -6,11 +6,12 @@ public class Tuple {
 	public double percentage;
 	
 	/**
-	 * Generates a new Tuple with the starting values mk=0, avgTime=0, outOfTime=false.
+	 * Generates a new Tuple with the starting values mk=0, avgTime=0, percentage=100.0.
 	 */
 	public Tuple(){
 		this.mk = 0;
 		this.avgTime = 0;
+		this.percentage = 100.0;
 	}
 	
 	/**

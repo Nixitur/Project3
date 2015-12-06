@@ -1,1 +1,6 @@
 /bin/
+/Results/*.aux
+/Results/*.log
+/Results/*.out
+/Results/*.synctex.gz
+/Results/*.pdf

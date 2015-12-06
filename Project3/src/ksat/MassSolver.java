@@ -9,10 +9,32 @@ import java.util.Random;
 
 public class MassSolver {
 	private static final int NO_OF_TRIES = 100;
+	private static final long MAX_TIME = 3000;
 	public static final int GENERATION_VARIANT_1 = 1;
 	public static final int GENERATION_VARIANT_2 = 2;
 	
-	public static Tuple solve(int noOfVars, int startingNoOfClauses, int generationVariant){
+	public static Map<Integer,Integer> solve(int startingNoOfVars, int generationVariant){
+		Map<Integer,Integer> nToMk = new HashMap<Integer,Integer>();
+		int n = startingNoOfVars;
+		int m = 1;
+		int mk = 1;
+		boolean outOfTime = false;
+		while (!outOfTime){
+			Tuple t = solveForSpecificN(n, m, generationVariant);
+			mk = t.mk;
+			outOfTime = (t.avgTime > MAX_TIME);
+			nToMk.put(n, mk);
+			System.out.println(n+": "+t.toString());
+			if (!outOfTime){
+				n++;
+				// For n+1, mk MUST be larger than for n. Thus, start from the last discovered mk.
+				m = mk;
+			}
+		}
+		return nToMk;
+	}
+	
+	private static Tuple solveForSpecificN(int noOfVars, int startingNoOfClauses, int generationVariant){
 		Tuple result = new Tuple();
 		int n = noOfVars;
 		int m = startingNoOfClauses;
