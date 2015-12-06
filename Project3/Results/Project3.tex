@@ -1,7 +1,7 @@
 \documentclass[maincolor=black]{exercise}
 \settitle[Projektteil 3]{Algorithmik}
 \addstudent[625391]{Kaspar-David Buss}
-\addstudent{Julian Hoffmann}
+\addstudent[573537]{Julian Hoffmann}
 \setgroup{Gruppe 2 (Mittwochsgruppe)}
 \setlength{\parskip}{0em}
 \setlength{\parindent}{3ex}
@@ -46,8 +46,7 @@ Die zweite Ebene ist eine Methode, die wiederum ein Paar $(n,m)$ erhält und an 
 Die dritte Ebene erhält lediglich einen Startwert $n := n_{start}$ als Eingabe und baut ein Mapping $M: n \mapsto m_3^{[i]}(n)$ auf. $m$ startet hierbei bei 1. Das Tupel $(n,m)$ wird an Ebene 2 weitergegeben und die Ausgabe wird betrachtet, womit $m_3^{[i]}(n)$ bestimmt ist und in $M$ eingetragen wird. Solange die in Ebene 1 ermittelte durchschnittliche Zeit $t$ kleiner als 3 Sekunden ist, wird $m := m_3^{[i]}(n)$ gesetzt, $n$ um 1 inkrementiert und $(n,m)$ abermals an Ebene 2 weitergegeben. Sobald aber $t$ größer als 3 Sekunden ist, bricht die Schleife ab und es wird $M$ ausgegeben. Dies basiert auf der Annahme, dass $m_3^{[i]}(n)$ monoton steigend ist, was Sinn macht, da für gleich bleibendes $m$ ein größeres $n$ mehr Freiheiten bietet, um Belegungen zu erstellen. Ferner konnten wir dies durch unsere Experimente bestätigen.\\
 Diese Klasse enthält weiterhin Hilfsmethoden zur Generierung von zufälligen Formeln nach Verteilung $[1]$ oder $[2]$ sowie eine Methode, um aus einer Formel $\varphi$ triviale Klauseln, in denen $x \vee \non{x}$ für eine Variable $x$ vorkommt, sowie Duplikate von Klauseln zu entfernen. Letzteres verändert die Erfüllbarkeit der Formel nicht, macht aber die Erfüllbarkeitssuche deutlich schneller. Da die Klauseln \emph{unabhängig} aus der Verteilung $[i]$ gewählt werden, sind Duplikate nämlich noch nicht von vornherein ausgeschlossen.
 
-\subsection{Das ist dein Bier, Julian}
-Diesen Teil kannste selber schreiben.
+F�r Aufgabenteil b werden die Werte n_max, sowie die Anzahl der Klauseln m aus Aufgabenteil a benutzt. Bei Variante 1 werden also die Wahrscheinlichkeiten f�r n_max = 29 und m im Intervall [122,148] berechnet. F�r die zweite Variante werden die Wahrscheinlichkeiten von n_max = 27 und m im Intervall [111, 135] berechnet.
 
 \section*{Ergebnisse}
 \subsection{Aufgabe 3.3a)}
@@ -79,5 +78,13 @@ Diese führt aber für Verteilung $[1]$ selbst bei großen $n$ zu sehr starken A
 Somit ist $\tau_3 = 4.61$ ein plausibler Wert für Verteilung $[2]$. Für Verteilung $[1]$ ist der beste Wert $\tau_3 = 4.94$, dieser ist aber auf diesen Ergebnissen nicht besonders gut.
 
 \subsection{3.3b)}
-Dies ist dein Teil, Julian.
+\begin{figure}[t]
+	\includegraphics[width=\linewidth]{Diagram-A.png}
+	\caption{Variante 1 n_max = 29; M=[122,148]}
+\end{figure}
+
+\begin{figure}[t]
+	\includegraphics[width=\linewidth]{Diagram-B.png}
+	\caption{Variante 1 n_max = 27; M=[111,135]}
+\end{figure}
 \end{document}

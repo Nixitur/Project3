@@ -19,6 +19,8 @@ public class Main {
 		System.out.println("For variant "+variant+", n_max is "+n+".");
 		System.out.println("m_3^["+variant+"](n) is as follows:");
 		System.out.println(orderedMapString(nToMk,10,n));
+		int m = nToMk.get(n);
+		MassSolver.solveB(n, m, variant);
 	}
 	
 	/**

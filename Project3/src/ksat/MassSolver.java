@@ -33,6 +33,17 @@ public class MassSolver {
 		}
 		return nToMk;
 	}
+	public static void solveB(int n_max, int m, int generationVariant) {
+		int m_from = m - m/10;
+		int m_to = m + m/10;
+		System.out.println("% for n_max, m from m - 10% to m + 10%");
+		for(int i=m_from;i<=m_to;i++) {
+			Tuple result = new Tuple();
+			result = MassSolver.testForNM(n_max,i,1);
+			System.out.println("m: "+i+" %: "+result.percentage);
+		}
+		
+	}
 	
 	private static Tuple solveForSpecificN(int noOfVars, int startingNoOfClauses, int generationVariant){
 		Tuple result = new Tuple();
