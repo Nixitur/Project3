@@ -43,48 +43,44 @@ Als Hilfsmethode ist noch eine Methode vorhanden, die überprüft, ob eine besti
 Die Klasse \anf{\texttt{MassSolver}} in unserer Implementierung besteht wiederum aus drei Teilen. Jede dieser erhält als Eingabe immer die Zahl $i$ der Verteilung $[i]$, die angibt, wie die Klauseln generiert werden.\par
 Die erste Ebene ist eine Methode, die als Eingabe ein bestimmtes Paar $(n,m)$ erhält. Es wird 100-mal eine zufällige Formel $\varphi$ mit $n$ Variablen und $m$ Klauseln generiert. Anschließend wird versucht, mittels \texttt{Solver} eine erfüllende Belegung von $\varphi$ zu finden. Nach diesen 100 Versuchen wird die durchschnittliche Zeit $t$ pro Erfüllbarkeitssuche sowie der Anteil $a$ an erfüllten Formeln zu 100 ermittelt und ausgegeben.\par
 Die zweite Ebene ist eine Methode, die wiederum ein Paar $(n,m)$ erhält und an die erste Ebene weitergibt. Solange der oben genannte Anteil größer als $0.5$ ist, wird $m$ um 1 erhöht und $(n,m)$ abermals an die erste Ebene weitergegeben. Sobald der Anteil für ein $(n,m_s)$ aber kleiner als $0.5$ ist, werden dieser Anteil $a_s$ sowie der vorige $a_{s-1}$ ausgewählt und deren Abstand zu $0.5$ verglichen. Abhängig davon, welcher Abstand kleiner ist, wird entweder $m_s$ oder $m_{s-1}$ ausgegeben. Dies ist $m_3^{[i]}(n)$. Zusätzlich wird die letzte Ausgabe von Ebene 1 ausgegeben. Dies basiert auf der Annahme, dass $\sigma_3^{[i]}(n,m)$ monoton fallend in $m$ ist, was Sinn macht, da mehr Anforderungen an die Belegung gegeben sind und daher ein Erfolg unwahrscheinlicher ist. Ferner konnten wir dies durch unsere Experimente bestätigen.\par
-Die dritte Ebene erhält lediglich einen Startwert $n := n_{start}$ als Eingabe und baut ein Mapping $M: n \mapsto m_3^{[i]}(n)$ auf. $m$ startet hierbei bei 1. Das Tupel $(n,m)$ wird an Ebene 2 weitergegeben und die Ausgabe wird betrachtet, womit $m_3^{[i]}(n)$ bestimmt ist und in $M$ eingetragen wird. Solange die in Ebene 1 ermittelte durchschnittliche Zeit $t$ kleiner als 3 Sekunden ist, wird $m := m_3^{[i]}(n)$ gesetzt, $n$ um 1 inkrementiert und $(n,m)$ abermals an Ebene 2 weitergegeben. Sobald aber $t$ größer als 3 Sekunden ist, bricht die Schleife ab und es wird $M$ ausgegeben. Dies basiert auf der Annahme, dass $m_3^{[i]}(n)$ monoton steigend ist, was Sinn macht, da für gleich bleibendes $m$ ein größeres $n$ mehr Freiheiten bietet, um Belegungen zu erstellen. Ferner konnten wir dies durch unsere Experimente bestätigen.\\
-Diese Klasse enthält weiterhin Hilfsmethoden zur Generierung von zufälligen Formeln nach Verteilung $[1]$ oder $[2]$ sowie eine Methode, um aus einer Formel $\varphi$ triviale Klauseln, in denen $x \vee \non{x}$ für eine Variable $x$ vorkommt, sowie Duplikate von Klauseln zu entfernen. Letzteres verändert die Erfüllbarkeit der Formel nicht, macht aber die Erfüllbarkeitssuche deutlich schneller. Da die Klauseln \emph{unabhängig} aus der Verteilung $[i]$ gewählt werden, sind Duplikate nämlich noch nicht von vornherein ausgeschlossen.
-
-Für Aufgabenteil b werden die Werte $n_{max}$, sowie die Anzahl der Klauseln $m_3^{[i]}(n_{max})$ aus Aufgabenteil a benutzt. Bei Variante 1 werden also die Wahrscheinlichkeiten für $n_{max} = 29$ und $m$ im Intervall [122,148] berechnet. Für die zweite Variante werden die Wahrscheinlichkeiten von $n_{max} = 27$ und $m$ im Intervall [111, 135] berechnet.
+Die dritte Ebene erhält lediglich einen Startwert $n := n_{start}$ als Eingabe und baut ein Mapping $M: n \mapsto m_3^{[i]}(n)$ auf. $m$ startet hierbei bei 1. Das Tupel $(n,m)$ wird an Ebene 2 weitergegeben und die Ausgabe wird betrachtet, womit $m_3^{[i]}(n)$ bestimmt ist und in $M$ eingetragen wird. Solange die in Ebene 1 ermittelte durchschnittliche Zeit $t$ kleiner als 3 Sekunden ist, wird $m := m_3^{[i]}(n)$ gesetzt, $n$ um 1 inkrementiert und $(n,m)$ abermals an Ebene 2 weitergegeben. Sobald aber $t$ größer als 3 Sekunden ist, bricht die Schleife ab und es wird $M$ ausgegeben. Dies basiert auf der Annahme, dass $m_3^{[i]}(n)$ monoton steigend ist, was Sinn macht, da für gleich bleibendes $m$ ein größeres $n$ mehr Freiheiten bietet, um Belegungen zu erstellen. Ferner konnten wir dies durch unsere Experimente bestätigen.\par
+Diese Klasse enthält weiterhin Hilfsmethoden zur Generierung von zufälligen Formeln nach Verteilung $[1]$ oder $[2]$ sowie eine Methode, um aus einer Formel $\varphi$ triviale Klauseln, in denen $x \vee \non{x}$ für eine Variable $x$ vorkommt, sowie Duplikate von Klauseln zu entfernen. Letzteres verändert die Erfüllbarkeit der Formel nicht, macht aber die Erfüllbarkeitssuche deutlich schneller. Da die Klauseln \emph{unabhängig} aus der Verteilung $[i]$ gewählt werden, sind Duplikate nämlich noch nicht von vornherein ausgeschlossen.\par
+Für Aufgabenteil b werden die Werte $n_{max}$, sowie die Anzahl der Klauseln $m_3^{[i]}(n_{max})$ aus Aufgabenteil a benutzt. Bei Variante 1 werden also die Wahrscheinlichkeiten für $n_{max} = 28$ und $m$ im Intervall [112,136] berechnet. Für die zweite Variante werden die Wahrscheinlichkeiten von $n_{max} = 27$ und $m$ im Intervall [111, 135] berechnet.
 
 \section*{Ergebnisse}
 \subsection{Aufgabe 3.3a)}
 \begin{figure}[t]
-	\includegraphics[width=\linewidth]{Diagram.png}
+	\includegraphics[width=\linewidth]{DiagramNew.png}
 	\caption{Mapping von $n$ zu $m_3^{[i]}(n)$\label{fig:diagram}}
 \end{figure}
-In unserer Implementierung gilt für Verteilung $[1]$ $n_{max} = 29$ und für Verteilung $[2]$ $n_{max} = 27$.\\
+In unserer Implementierung gilt für Verteilung $[1]$ $n_{max} = 28$ und für Verteilung $[2]$ $n_{max} = 27$.\\
 \begin{adjustwidth}{-1cm}{}
-\begin{tabular}{l|rrrrrrrrrrrrrrrrrrrr}
-	$n$ & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 & 21 & 22 & 23 & 24 & 25 & 26 & 27 & 28 & 29\\
+\begin{tabular}{l|rrrrrrrrrrrrrrrrrrr}
+	$n$ & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 & 21 & 22 & 23 & 24 & 25 & 26 & 27 & 28\\
 	\midrule
-	$m_3^{[1]}(n)$ & 61 & 62 & 66 & 72 & 76 & 80 & 85 & 88 & 91 & 98 & 99 & 104 & 108 & 111 & 116 & 122 & 125 & 130 & 133 & 135\\
+	$m_3^{[1]}(n)$ & 49 & 52 & 56 & 60 & 66 & 69 & 73 & 78 & 83 & 85 & 90 & 94 & 99 & 104 & 105 & 110 & 115 & 116 & 124\\
 	\midrule
-	$m_3^{[2]}(n)$ & 51 & 54 & 59 & 63 & 67 & 71 & 74 & 81 & 84 & 88 & 91 & 97 & 102 & 105 & 107 & 113 & 117 & 123 & & \\
+	$m_3^{[2]}(n)$ & 51 & 54 & 59 & 63 & 67 & 71 & 74 & 81 & 84 & 88 & 91 & 97 & 102 & 105 & 107 & 113 & 117 & 123 & \\
 \end{tabular}
 \end{adjustwidth}
 \vspace{10pt}
-Wie man sieht, gilt durchgängig $m_3^{[1]}(n) > m_3^{[2]}(n)$. Dies haben wir erwartet, da Verteilung $[1]$ auch Klauseln erstellen kann, in denen $x \vee \non{x}$ vorkommt für eine Variable $x$. Dadurch sind Formeln nach Verteilung $[1]$ tendenziell eher erfüllbar. Diese Ergebnisse sind ebenfalls zu sehen in Abbildung \ref{fig:diagram}.
-
-Es ist hierbei ein nahezu linearer Anstieg von $m_3^{[i]}(n)$ erkennbar. Mittels linearer Regression kann die Line of Best Fit bestimmt werden. Diese beträgt:\\
-$m_3^{[1]}(n) \approx 18.72+4.07\cdot n$\\
-$m_3^{[2]}(n) \approx 8.37+4.19\cdot n$\\
-Auf den ersten Blick scheint die Vermutung aus der Aufgabenstellung somit erfüllt zu sein, aber diese impliziert, dass die Line of Best Fit nahe an $(0,0)$ verlaufen müsste, was nicht der Fall ist. Ferner würde hierdurch ab einem $N$ die Ungleichung $m_3^{[1]}(N) < m_3^{[2]}(N)$ gelten, was keinen Sinn ergibt.\par
-Falls $m_3^{[1]}(0) = m_3^{[2]}(0) = 0$ verlangt wird, so führt dies zu folgenden Ergebnissen:\\
-$m_3^{[1]}(n) \approx 4.94\cdot n$\\
-$m_3^{[2]}(n) \approx 4.61\cdot n$\\
-Diese führt aber für Verteilung $[1]$ selbst bei großen $n$ zu sehr starken Abweichungen. Für Verteilung $[2]$ hingegen liegen die Ergebnisse \emph{insbesondere} für große $n$ recht nahe an dieser Linie.\par
-Somit ist $\tau_3 = 4.61$ ein plausibler Wert für Verteilung $[2]$. Für Verteilung $[1]$ ist der beste Wert $\tau_3 = 4.94$, dieser ist aber auf diesen Ergebnissen nicht besonders gut.
+Diese Ergebnisse sind ebenfalls zu sehen in Abbildung \ref{fig:diagram}.\par
+Wie man sieht, sind $m_3^{[1]}(n)$ und $m_3^{[2]}(n)$ sehr nahe beieinander. Ferner gilt durchgängig $m_3^{[2]}(n) > m_3^{[1]}(n)$. Dies ist interessant, da Verteilung $[1]$ im Gegensatz zu $[2]$ auch Klauseln erstellen kann, in denen $x \vee \non{x}$ vorkommt für eine Variable $x$. Formeln, die eine solche Klausel enthalten, sind tendenziell eher erfüllbar, da effektiv weniger Klauseln erfüllt werden müssen. Allerdings erstellt Verteilung $[1]$ auch Klauseln, in denen ein Literal mehrmals vorkommt. Eine solche Klausel enthält weniger unterschiedliche Variablen, wodurch es weniger Möglichkeiten gibt, sie zu erfüllen. Der letztere Effekt scheint hierbei zu dominieren, da Formeln nach Verteilung $[1]$ schwieriger zu erfüllen sind als diejenigen nach Verteilung $[2]$.\par
+In beiden Fällen ist ein nahezu linearer Anstieg von $m_3^{[i]}(n)$ erkennbar, was der Vermutung aus der Aufgabenstellung entspricht. Zusätzlich muss hierbei $m_3^{[1]}(0) = m_3^{[2]}(0) = 0$ gelten. Mittels linearer Regression kann die Line of Best Fit bestimmt werden. Diese beträgt:\\
+$m_3^{[1]}(n) \approx 4.475\cdot n$\\
+$m_3^{[2]}(n) \approx 4.607\cdot n$\\
+Die Vermutung aus der Aufgabenstellung scheint somit wahr zu sein, da $m_3^{[i]}(n)$ sich mit akzeptabler Genauigkeit linear zu $n$ verhält. Für Verteilung $[1]$ ist $\tau_3 = 4.475$ ein plausibler Wert und für Verteilung $[2]$ ist dieser Wert $\tau_3 = 4.607$.
 
 \subsection{3.3b)}
-Die Ergebnisse von Aufgabenteil b) sind in Abbildung \ref{fig:b1} und \ref{fig:b2} zu sehen. Auf der Ordinate ist jeweils  $\sigma_3^{[i]}(n_{max},m)$ in Prozent aufgetragen.
+Die Ergebnisse von Aufgabenteil b) sind in Abbildung \ref{fig:b1} und \ref{fig:b2} zu sehen. Auf der Ordinate ist jeweils  $\sigma_3^{[i]}(n_{max},m)$ in Prozent aufgetragen.\par
+Wie man sieht, fällt die Wahrscheinlichkeit, dass eine erfüllende Belegung gefunden wird, mit steigender Anzahl der Klauseln. Dies entspricht der Erwartung. Sie scheint auf den ersten Blick linear zu fallen, dies aber ist nicht der Fall, da die Wahrscheinlichkeit, dass eine zufällig ausgewählte Formel mit $m$ Klauseln erfüllbar ist, nie 0 sein kann. Weitere Vermutungen möchten wir hierzu nicht stellen.\par
+Was bei unseren Ergebnissen allerdings erstaunt, ist, wie stark die Wahrscheinlichkeit $\sigma_3^{[i]}(n_{max},m)$ schwankt. Wir hätten einen zumindest annähernd monotonen Fall erwartet. Dies ist wohl lediglich der kleinen Anzahl von Versuchen zuzuschieben.
 \begin{figure}[t]
 	\includegraphics[width=\linewidth]{Diagram-A.png}
-	\caption{Verteilung [1] $n_{max} = 29$; $m \in [122,148]$\label{fig:b1}}
+	\caption{Werte von $\sigma_3^{[1]}(n_{max},m)$ in Prozent, $n_{max} = 28$; $m \in [112,136]$\label{fig:b1}}
 \end{figure}
 \begin{figure}[t]
 	\includegraphics[width=\linewidth]{Diagram-B.png}
-	\caption{Verteilung [2] $n_{max} = 27$; $m \in [111,135]$\label{fig:b2}}
+	\caption{Werte von $\sigma_3^{[2]}(n_{max},m)$ in Prozent, $n_{max} = 27$; $m \in [111,135]$\label{fig:b2}}
 \end{figure}
 \end{document}

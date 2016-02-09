@@ -112,11 +112,9 @@ public class MassSolver {
 		int[][] clauses = new int[noOfClauses][3];
 		Random rand = new Random();
 		for (int i = 0; i < noOfClauses; i++){
-			List<Integer> literalsCopy = new ArrayList<Integer>(literals);
 			for (int j = 0; j < 3; j++){
-				int index = rand.nextInt(literalsCopy.size());
-				clauses[i][j] = literalsCopy.get(index);
-				literalsCopy.remove(index);
+				int index = rand.nextInt(literals.size());
+				clauses[i][j] = literals.get(index);
 			}
 		}
 		return clauses;

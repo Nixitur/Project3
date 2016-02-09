@@ -1,5 +1,6 @@
 package ksat;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -16,6 +17,7 @@ public class Main {
 				+ "for the last (n,m) combination]");
 		int n = Integer.parseInt(args[1]);
 		Map<Integer,Integer> nToMk = MassSolver.solve(n, variant);
+		n = Collections.max(nToMk.keySet());
 		System.out.println("For variant "+variant+", n_max is "+n+".");
 		System.out.println("m_3^["+variant+"](n) is as follows:");
 		System.out.println(orderedMapString(nToMk,10,n));
